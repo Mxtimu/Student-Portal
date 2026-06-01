@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Aurora University Student Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            line-height: 1.6;
+            background: #f0f2f5;
+        }
+
+        /* Header */
+        header {
+            background: #fff;
+            padding: 15px 0;
+            border-bottom: 1px solid #e0e0e0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 25px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #1a365d;
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #555;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #1a365d;
+        }
+
+        /* Dashboard Layout */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            gap: 30px;
+            padding: 30px 25px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: #fff;
+            border-radius: 12px;
+            padding: 25px 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            height: fit-content;
+            position: sticky;
+            top: 30px;
+        }
+
+        .user-profile {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 20px;
+        }
+
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #fff;
+            margin: 0 auto 15px;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 1.1rem;
+        }
+
+        .user-id {
+            color: #888;
+            font-size: 0.85rem;
+            margin-top: 3px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 5px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            color: #555;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .sidebar-menu a:hover {
+            background: #f5f7fa;
+            color: #1a365d;
+        }
+
+        .sidebar-menu a.active {
+            background: #1a365d;
+            color: #fff;
+        }
+
+        .sidebar-menu .icon {
+            font-size: 1.2rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        /* Welcome Banner */
+        .welcome-banner {
+            background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);
+            color: #fff;
+            padding: 30px 35px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .welcome-banner h2 {
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+
+        .welcome-banner p {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: #fff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        }
+
+        .stat-icon {
+            width: 55px;
+            height: 55px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            flex-shrink: 0;
+        }
+
+        .stat-icon.courses { background: #e3f2fd; }
+        .stat-icon.gpa { background: #f3e5f5; }
+        .stat-icon.attendance { background: #e8f5e9; }
+        .stat-icon.assignments { background: #fff3e0; }
+
+        .stat-info h3 {
+            font-size: 1.6rem;
+            color: #2c3e50;
+            font-weight: 700;
+        }
+
+        .stat-info p {
+            color: #777;
+            font-size: 0.9rem;
+            margin-top: 2px;
+        }
+
+        /* Content Sections */
+        .content-section {
+            background: #fff;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .section-header h3 {
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: 1.3rem;
+            color: #2c3e50;
+        }
+
+        .section-header a {
+            color: #1a365d;
+            font-size: 0.9rem;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .section-header a:hover {
+            color: #2c5282;
+        }
+
+        /* Courses Table */
+        .courses-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .courses-table th {
+            text-align: left;
+            padding: 12px 15px;
+            background: #f8f9fa;
+            color: #555;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .courses-table td {
+            padding: 15px;
+            border-bottom: 1px solid #f0f0f0;
+            color: #333;
+        }
+
+        .courses-table tr:hover {
+            background: #fafbfc;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .badge-warning {
+            background: #fff3e0;
+            color: #e65100;
+        }
+
+        .badge-info {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
+        /* Upcoming Assignments */
+        .assignment-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .assignment-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+        .assignment-item:hover {
+            background: #f0f2f5;
+        }
+
+        .assignment-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .assignment-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 8px;
+            background: #e3f2fd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        .assignment-details h4 {
+            font-size: 0.95rem;
+            color: #2c3e50;
+            margin-bottom: 3px;
+        }
+
+        .assignment-details p {
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        .due-date {
+            font-size: 0.85rem;
+            color: #e65100;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        /* Announcements */
+        .announcement-list {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .announcement-item {
+            padding-left: 20px;
+            border-left: 3px solid #1a365d;
+        }
+
+        .announcement-item h4 {
+            font-size: 0.95rem;
+            color: #2c3e50;
+            margin-bottom: 4px;
+        }
+
+        .announcement-item p {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .announcement-item .time {
+            font-size: 0.8rem;
+            color: #999;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        .quick-action-btn {
+            padding: 18px;
+            background: #fff;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            color: #555;
+            display: block;
+        }
+
+        .quick-action-btn:hover {
+            border-color: #1a365d;
+            color: #1a365d;
+            background: #f9fafb;
+        }
+
+        .quick-action-btn .action-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .quick-action-btn .action-label {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        /* Footer */
+        footer {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 35px 0 20px;
+            margin-top: 40px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-contact p {
+            margin: 5px 0;
+            font-size: 0.9rem;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: #fff;
+            transition: background 0.3s;
+        }
+
+        .social-icon:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.85rem;
+            color: #bdc3c7;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: static;
+            }
+
+            .sidebar-menu {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+
+            .sidebar-menu a {
+                font-size: 0.9rem;
+                padding: 10px 12px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .assignment-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .due-date {
+                align-self: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">AURORA UNIVERSITY</div>
+                <ul class="nav-links">
+                    <li><a href="student_portal_landing.html">Home</a></li>
+                    <li><a href="apply.html">Apply Now</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Dashboard -->
+    <div class="dashboard">
+        
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="user-profile">
+                <div class="avatar">ST</div>
+                <div class="user-name">Student Name</div>
+                <div class="user-id">ID: AU-2024-001</div>
+            </div>
+
+            <ul class="sidebar-menu">
+                <li><a href="#" class="active"><span class="icon">&#127968;</span> Dashboard</a></li>
+                <li><a href="#"><span class="icon">&#128214;</span> My Courses</a></li>
+                <li><a href="#"><span class="icon">&#128220;</span> Assignments</a></li>
+                <li><a href="#"><span class="icon">&#128202;</span> Grades</a></li>
+                <li><a href="#"><span class="icon">&#128197;</span> Schedule</a></li>
+                <li><a href="#"><span class="icon">&#128172;</span> Messages</a></li>
+                <li><a href="#"><span class="icon">&#128179;</span> Payments</a></li>
+                <li><a href="#"><span class="icon">&#128269;</span> Resources</a></li>
+                <li><a href="#"><span class="icon">&#128100;</span> Profile</a></li>
+                <li><a href="#"><span class="icon">&#128172;</span> Support</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            
+            <!-- Welcome Banner -->
+            <div class="welcome-banner">
+                <h2>Welcome back, Student!</h2>
+                <p>Here's what's happening with your courses and upcoming deadlines.</p>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <a href="#" class="quick-action-btn">
+                    <div class="action-icon">&#128220;</div>
+                    <div class="action-label">Submit Assignment</div>
+                </a>
+                <a href="#" class="quick-action-btn">
+                    <div class="action-icon">&#128214;</div>
+                    <div class="action-label">Browse Courses</div>
+                </a>
+                <a href="#" class="quick-action-btn">
+                    <div class="action-icon">&#128202;</div>
+                    <div class="action-label">View Grades</div>
+                </a>
+                <a href="#" class="quick-action-btn">
+                    <div class="action-icon">&#127891;</div>
+                    <div class="action-label">Academic Calendar</div>
+                </a>
+                <a href="#" class="quick-action-btn">
+                    <div class="action-icon">&#128172;</div>
+                    <div class="action-label">Messages</div>
+                </a>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon courses">&#128214;</div>
+                    <div class="stat-info">
+                        <h3>6</h3>
+                        <p>Active Courses</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon gpa">&#127942;</div>
+                    <div class="stat-info">
+                        <h3>3.75</h3>
+                        <p>Current GPA</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon attendance">&#128200;</div>
+                    <div class="stat-info">
+                        <h3>92%</h3>
+                        <p>Attendance Rate</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon assignments">&#128220;</div>
+                    <div class="stat-info">
+                        <h3>4</h3>
+                        <p>Pending Tasks</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- My Courses -->
+            <div class="content-section">
+                <div class="section-header">
+                    <h3>My Courses</h3>
+                    <a href="#">View All</a>
+                </div>
+                <table class="courses-table">
+                    <thead>
+                        <tr>
+                            <th>Course Code</th>
+                            <th>Course Name</th>
+                            <th>Instructor</th>
+                            <th>Schedule</th>
+                            <th>Progress</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>CS101</td>
+                            <td>Introduction to Computer Science</td>
+                            <td>Dr. Sarah Johnson</td>
+                            <td>Mon, Wed 10:00 AM</td>
+                            <td>75%</td>
+                            <td><span class="badge badge-success">On Track</span></td>
+                        </tr>
+                        <tr>
+                            <td>MATH201</td>
+                            <td>Calculus II</td>
+                            <td>Prof. Michael Chen</td>
+                            <td>Tue, Thu 2:00 PM</td>
+                            <td>60%</td>
+                            <td><span class="badge badge-warning">Attention</span></td>
+                        </tr>
+                        <tr>
+                            <td>ENG150</td>
+                            <td>Academic Writing</td>
+                            <td>Dr. Emily Williams</td>
+                            <td>Mon, Fri 11:00 AM</td>
+                            <td>90%</td>
+                            <td><span class="badge badge-success">On Track</span></td>
+                        </tr>
+                        <tr>
+                            <td>PHYS110</td>
+                            <td>Physics for Engineers</td>
+                            <td>Dr. James Brown</td>
+                            <td>Wed, Fri 9:00 AM</td>
+                            <td>45%</td>
+                            <td><span class="badge badge-warning">Attention</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Upcoming Assignments -->
+            <div class="content-section">
+                <div class="section-header">
+                    <h3>Upcoming Assignments</h3>
+                    <a href="#">View All</a>
+                </div>
+                <div class="assignment-list">
+                    <div class="assignment-item">
+                        <div class="assignment-info">
+                            <div class="assignment-icon">&#128220;</div>
+                            <div class="assignment-details">
+                                <h4>Final Project - Computer Science</h4>
+                                <p>CS101 - Due in 3 days</p>
+                            </div>
+                        </div>
+                        <div class="due-date">Dec 15, 2024</div>
+                    </div>
+                    <div class="assignment-item">
+                        <div class="assignment-info">
+                            <div class="assignment-icon">&#128220;</div>
+                            <div class="assignment-details">
+                                <h4>Problem Set 8 - Calculus</h4>
+                                <p>MATH201 - Due in 5 days</p>
+                            </div>
+                        </div>
+                        <div class="due-date">Dec 17, 2024</div>
+                    </div>
+                    <div class="assignment-item">
+                        <div class="assignment-info">
+                            <div class="assignment-icon">&#128220;</div>
+                            <div class="assignment-details">
+                                <h4>Research Paper Draft</h4>
+                                <p>ENG150 - Due in 7 days</p>
+                            </div>
+                        </div>
+                        <div class="due-date">Dec 19, 2024</div>
+                    </div>
+                    <div class="assignment-item">
+                        <div class="assignment-info">
+                            <div class="assignment-icon">&#128220;</div>
+                            <div class="assignment-details">
+                                <h4>Lab Report - Physics</h4>
+                                <p>PHYS110 - Due in 10 days</p>
+                            </div>
+                        </div>
+                        <div class="due-date">Dec 22, 2024</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Announcements -->
+            <div class="content-section">
+                <div class="section-header">
+                    <h3>Announcements</h3>
+                    <a href="#">View All</a>
+                </div>
+                <div class="announcement-list">
+                    <div class="announcement-item">
+                        <h4>Final Exam Schedule Released</h4>
+                        <p>The final exam schedule for Fall 2024 has been posted. Please check your student portal for your exam dates and locations.</p>
+                        <div class="time">Posted 2 days ago by Registrar Office</div>
+                    </div>
+                    <div class="announcement-item">
+                        <h4>Campus Event: Tech Career Fair</h4>
+                        <p>Join us on December 20th for the annual Tech Career Fair. Over 50 companies will be recruiting on campus.</p>
+                        <div class="time">Posted 3 days ago by Career Services</div>
+                    </div>
+                    <div class="announcement-item">
+                        <h4>Library Extended Hours During Finals</h4>
+                        <p>The main library will be open 24/7 from December 10th through December 22nd to support students during finals week.</p>
+                        <div class="time">Posted 1 week ago by Library Services</div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-contact">
+                    <p>1 (213) 455-8500</p>
+                    <p>aurora-a@university.com</p>
+                </div>
+                <div class="social-icons">
+                    <a href="#" class="social-icon">f</a>
+                    <a href="#" class="social-icon">t</a>
+                    <a href="#" class="social-icon">i</a>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; Copyright Aurora University
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Simple interactivity for demo
+        document.querySelectorAll('.sidebar-menu a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelectorAll('.sidebar-menu a').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Quick actions feedback
+        document.querySelectorAll('.quick-action-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const action = this.querySelector('.action-label').textContent;
+                alert(`${action} - Feature coming soon!`);
+            });
+        });
+
+        // Update stats dynamically
+        function updateStats() {
+            const stats = document.querySelectorAll('.stat-info h3');
+            stats.forEach(stat => {
+                if (stat.textContent.includes('%')) {
+                    stat.textContent = parseInt(stat.textContent) + 1 + '%';
+                }
+            });
+        }
+
+        // Set current semester info
+        document.querySelector('.welcome-banner p').textContent = 
+            "Here's what's happening with your courses and upcoming deadlines. | Fall 2024 Semester";
+    </script>
+
+</body>
+</html>
